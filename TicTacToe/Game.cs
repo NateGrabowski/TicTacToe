@@ -5,6 +5,7 @@
         public int Turn = 1; //Player 1 && Player 2
         private string e1 = " ", e2 = " ", e3 = " ", e4 = " ", e5 = " ", e6 = " ", e7 = " ", e8 = " ", e9 = " ";
         public int Moves;
+        public int ResetTurn;
         public Input input { get; set; }
         public Section section { get; set; }
         public enum Input { X, O }
@@ -58,6 +59,7 @@
         }
         public void PlaceMark(int turn, Section section)
         {
+            string[] checkBefore = { e1, e2, e3, e4, e5, e6, e7, e8, e9 };
             switch (turn, section)
             {
                 case (1, Section.BottomLeft):
@@ -115,7 +117,16 @@
                     if (e9 == " ") { e9 = Enum.GetName(Input.O); }
                     break;
             }
-            Moves += 1;
+            string[] checkAfter = { e1, e2, e3, e4, e5, e6, e7, e8, e9 };
+            if (checkAfter.SequenceEqual(checkBefore))
+            {
+                Console.WriteLine("Try again...");
+                ResetTurn += 1;
+            }
+            else
+            {
+                Moves += 1;
+            }
         }
         public void DisplayBoard()
         {
@@ -129,7 +140,15 @@
 
         public int TurnChanger()
         {
-            return Turn == 1 ? Turn += 1 : Turn -= 1;
+            if (ResetTurn == 1)
+            {
+                ResetTurn = 0;
+                return Turn;
+            }
+            else
+            {
+                return Turn == 1 ? Turn += 1 : Turn -= 1;
+            }
         }
 
         public bool GameStatus()
